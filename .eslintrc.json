@@ -10,11 +10,6 @@
       "plugin:prettier/recommended",
       "plugin:import/errors",
       "plugin:import/warnings"
-      //* Временно отключено
-      // "plugin:react-hooks/recommended",
-      // "airbnb",
-      // "airbnb/hooks",
-      // "plugin:jsx-a11y/recommended"
     ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
@@ -34,9 +29,6 @@
       "react",
       "prettier",
       "import"
-      //* Удалить в случае несовместимости
-      // "react-hooks",
-      // "jsx-a11y",
     ],
     "rules": {
       "indent": [
@@ -71,16 +63,6 @@
           "newlines-between": "always"
         }
       ]
-      //* Настройки eslint-plugin-import
-      // "import/named": 2,
-      // "import/namespace": 2,
-      // "import/default": 2,
-      // "import/export": 2,
-      //* Настройки eslint-plugin-react-hooks
-      // "react-hooks/rules-of-hooks": "error",
-      // "react-hooks/exhaustive-deps": "warn",
-      //* Настройки eslint-plugin-jsx-a11y
-      // "jsx-a11y/rule-name": 2
     },
     "settings": {
       "react": {
