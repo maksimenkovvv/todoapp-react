@@ -1,0 +1,96 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "ignorePatterns": ["node_modules", "dist", "build"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+      //* Временно отключено
+      // "plugin:react-hooks/recommended",
+      // "airbnb",
+      // "airbnb/hooks",
+      // "plugin:jsx-a11y/recommended"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "babelOptions": {
+        "parserOpts": {
+          "plugins": ["jsx"]
+        }
+      },
+      "requireConfigFile": false,
+      "ecmaVersion": 12,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "react",
+      "prettier",
+      "import"
+      //* Удалить в случае несовместимости
+      // "react-hooks",
+      // "jsx-a11y",
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "prettier/prettier": ["error", { "endOfLine": "auto" }],
+      "linebreak-style": [0, "unix"],
+      "quotes": ["error", "single"],
+      "semi": [2, "always"],
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": 0,
+      "import/no-unresolved": [
+        2,
+        {
+          "caseSensitive": false
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [".js", ".jsx"]
+        }
+      ],
+      "import/order": [
+        2,
+        {
+          "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+          "newlines-between": "always"
+        }
+      ]
+      //* Настройки eslint-plugin-import
+      // "import/named": 2,
+      // "import/namespace": 2,
+      // "import/default": 2,
+      // "import/export": 2,
+      //* Настройки eslint-plugin-react-hooks
+      // "react-hooks/rules-of-hooks": "error",
+      // "react-hooks/exhaustive-deps": "warn",
+      //* Настройки eslint-plugin-jsx-a11y
+      // "jsx-a11y/rule-name": 2
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      },
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"],
+          "moduleDirectory": ["node_modules", "src/"]
+        }
+      }
+    }
+  }
