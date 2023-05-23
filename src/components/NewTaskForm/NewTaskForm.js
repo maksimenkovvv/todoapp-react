@@ -65,7 +65,7 @@ export default class NewTaskForm extends Component {
 
     return (
       <header className="header">
-        <h1>todos</h1>
+        <h1>Todos</h1>
         <form className="new-todo-form">
           <button type="button">
             <input
