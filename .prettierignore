@@ -1,3 +1,9 @@
 build
 node_modules
 README.md
+App.css
+Footer.css
+NewTaskForm.css
+Task.css
+TaskList.css
+TasksFilter.css
