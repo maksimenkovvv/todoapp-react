@@ -1,30 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import Task from '../Task/Task.js';
+import './TaskList.css';
 
-class TaskList extends Component {
-  render() {
-    const { todos, changeCheck, editItem, deleteItem } = this.props;
+import Task from '../Task/Task';
+
+function TaskList({ todoData, deleteItem, editItem, onSubmitEdit, onToggleDone }) {
+  TaskList.defaultProps = {
+    todoData: [],
+    deleteItem: () => {},
+    editItem: () => {},
+    onSubmitEdit: () => {},
+    onToggleDone: () => {},
+    done: false,
+  };
+
+  TaskList.typeProps = {
+    todoData: PropTypes.array,
+    deleteItem: PropTypes.func,
+    editItem: PropTypes.func,
+    onSubmitEdit: PropTypes.func,
+    onToggleDone: PropTypes.func,
+    done: PropTypes.bool,
+  };
+
+  const elements = todoData.map((item) => {
+    const { id, ...itemProps } = item;
+
+    const min = parseInt(itemProps.min);
+    const sec = parseInt(itemProps.sec);
+
     return (
-      <ul className="todo-list">
-        {todos.map((todo) => (
-          <Task key={todo.id} changeCheck={changeCheck} editItem={editItem} deleteItem={deleteItem} todo={todo} />
-        ))}
-      </ul>
+      <Task
+        {...itemProps}
+        key={id}
+        id={id}
+        deleteItem={() => deleteItem(id)}
+        editItem={() => editItem(id)}
+        onSubmitEdit={(event) => onSubmitEdit(event, id)}
+        done={item.done}
+        onToggleDone={() => onToggleDone(id)}
+        min={min}
+        sec={sec}
+      />
     );
-  }
+  });
+
+  return <ul className="todo-list">{elements}</ul>;
 }
-
-TaskList.propTypes = {
-  todos: PropTypes.any,
-  changeCheck: PropTypes.func.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
-};
-
-TaskList.defaultProps = {
-  todos: {},
-};
 
 export default TaskList;

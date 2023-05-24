@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import TasksFilter from '../TasksFilter/TasksFilter.js';
+import './Footer.css';
+import TasksFilter from '../TasksFilter/TasksFilter';
 
-class Footer extends React.Component {
+export default class Footer extends Component {
+  static defaultProps = {
+    todoCount: 0,
+    filter: 'all',
+  };
+
+  static propTypes = {
+    todoCount: PropTypes.number,
+    filter: PropTypes.string,
+    filterChange: PropTypes.func.isRequired,
+    clearCompleted: PropTypes.func,
+  };
+
   render() {
-    const { lefts, clearCompleted, changeFilter, filter } = this.props;
+    const { todoCount, filter, filterChange, clearCompleted } = this.props;
+
     return (
       <footer className="footer">
-        <span className="todo-count">{lefts} items left</span>
-        <TasksFilter filter={filter} changeFilter={changeFilter} />
-        <button type="button" onClick={clearCompleted} className="clear-completed">
+        <span className="todo-count">{todoCount} items left</span>
+        <TasksFilter filter={filter} filterChange={filterChange} />
+        <button type="button" className="clear-completed" onClick={clearCompleted}>
           Clear completed
         </button>
       </footer>
     );
   }
 }
-
-Footer.propTypes = {
-  lefts: PropTypes.number,
-  clearCompleted: PropTypes.func.isRequired,
-  changeFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string,
-};
-
-Footer.defaultProps = {
-  lefts: 0,
-  filter: 'All',
-};
-
-export default Footer;
