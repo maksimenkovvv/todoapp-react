@@ -1,1 +1,1 @@
-vercel todoapp-timer - https://todoapp-react-vercel-maksimenkovvv.vercel.app/
+vercel todoapp-hooks - https://todoapp-react-vercel-maksimenkovvv.vercel.app/
