@@ -1,114 +1,93 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import RU from 'date-fns/locale/en-AU';
 
 import './Task.css';
 
-export default class Task extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: this.props.label,
-      totalTime: props.min * 60 + props.sec,
-      remainingTime: props.min * 60 + props.sec,
-      isPlaying: false,
-    };
-  }
+export default function Task(props) {
+  const [value, setValue] = useState(props.label);
+  const [remainingTime, setRemainingTime] = useState(props.min * 60 + props.sec);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  static defaultProps = {
-    date: PropTypes.instanceOf(Date),
-  };
-
-  setTask = (event) => {
-    this.setState({
-      value: event.target.value,
-    });
-  };
-
-  componentDidMount() {
-    this.intervalId = setInterval(() => {
-      if (this.state.isPlaying) {
-        this.setState((prevState) => ({
-          remainingTime: prevState.remainingTime > 0 ? prevState.remainingTime - 1 : 0,
-        }));
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (isPlaying) {
+        setRemainingTime((prevState) => (prevState > 0 ? prevState - 1 : 0));
       }
     }, 1000);
-  }
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
+    return () => clearInterval(intervalId);
+  }, [isPlaying]);
 
-  handleStart = () => {
-    this.setState({ isPlaying: true });
+  const handleStart = () => {
+    setIsPlaying(true);
   };
 
-  handlePause = () => {
-    this.setState({ isPlaying: false });
+  const handlePause = () => {
+    setIsPlaying(false);
   };
 
-  handleReset = () => {
-    this.setState({
-      totalTime: this.props.minutes * 60 + this.props.seconds,
-      remainingTime: this.props.minutes * 60 + this.props.seconds,
-      isPlaying: false,
-    });
-  };
-
-  formatTime = (time) => {
+  const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return ` ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  render() {
-    const { onToggleDone, deleteItem, editItem, onSubmitEdit, edit, label, done, id } = this.props;
-    const { value, setTask, remainingTime } = this.state;
+  const time = formatDistanceToNow(new Date(), {
+    includeSeconds: false,
+    locale: RU,
+    addSuffix: true,
+  });
 
-    const time = formatDistanceToNow(new Date(), {
-      includeSeconds: false,
-      locale: RU,
-      addSuffix: true,
-    });
+  let classNames = '';
 
-    let classNames = '';
-
-    return edit ? (
-      <li className="editing">
-        <form onSubmit={onSubmitEdit}>
-          <input
-            id={id}
-            key={id}
-            className="edit"
-            type="text"
-            defaultValue={value}
-            placeholder={this.label}
-            onChange={setTask}
-            autoFocus
-          />
-        </form>
-      </li>
-    ) : (
-      <li className={done ? (classNames += 'completed') : classNames}>
-        <div className="view">
-          <input id={id} key={id} className="toggle" type="checkbox" onClick={onToggleDone} />
-          <label htmlFor={id}>
-            <span className="description">{label}</span>
-            <span className="description-info">
-              <button className="icon icon-play" onClick={this.handleStart} />
-              <button className="icon icon-pause" onClick={this.handlePause} />
-              <span className="created">
-                <span className="timer">{this.formatTime(remainingTime)}</span>
-              </span>
+  return props.edit ? (
+    <li className="editing">
+      <form onSubmit={props.onSubmitEdit}>
+        <input
+          id={props.id}
+          key={props.id}
+          className="edit"
+          type="text"
+          defaultValue={value}
+          placeholder={value}
+          onChange={(e) => setValue(e.target.value)}
+          autoFocus
+        />
+      </form>
+    </li>
+  ) : (
+    <li className={props.done ? (classNames += 'completed') : classNames}>
+      <div className="view">
+        <input id={props.id} key={props.id} className="toggle" type="checkbox" onClick={props.onToggleDone} />
+        <label htmlFor={props.id}>
+          <span className="description">{props.label}</span>
+          <span className="description-info">
+            <button className="icon icon-play" onClick={handleStart} />
+            <button className="icon icon-pause" onClick={handlePause} />
+            <span className="created">
+              <span className="timer">{formatTime(remainingTime)}</span>
             </span>
-            <span className="created">created {time}</span>
-          </label>
-
-          <button type="button" className="icon icon-edit" onClick={editItem}></button>
-          <button type="button" className="icon icon-destroy" onClick={deleteItem}></button>
-        </div>
-      </li>
-    );
-  }
+          </span>
+          <span className="created">created {time}</span>
+        </label>
+        <button type="button" className="icon icon-edit" onClick={props.editItem}></button>
+        <button type="button" className="icon icon-destroy" onClick={props.deleteItem}></button>
+      </div>
+    </li>
+  );
 }
+
+Task.propTypes = {
+  onToggleDone: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  editItem: PropTypes.func.isRequired,
+  onSubmitEdit: PropTypes.func.isRequired,
+  edit: PropTypes.bool.isRequired,
+  label: PropTypes.string.isRequired,
+  done: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
+  sec: PropTypes.number.isRequired,
+};

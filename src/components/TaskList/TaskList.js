@@ -27,6 +27,9 @@ function TaskList({ todoData, deleteItem, editItem, onSubmitEdit, onToggleDone }
   const elements = todoData.map((item) => {
     const { id, ...itemProps } = item;
 
+    const min = parseInt(itemProps.min);
+    const sec = parseInt(itemProps.sec);
+
     return (
       <Task
         {...itemProps}
@@ -37,6 +40,8 @@ function TaskList({ todoData, deleteItem, editItem, onSubmitEdit, onToggleDone }
         onSubmitEdit={(event) => onSubmitEdit(event, id)}
         done={item.done}
         onToggleDone={() => onToggleDone(id)}
+        min={min}
+        sec={sec}
       />
     );
   });
